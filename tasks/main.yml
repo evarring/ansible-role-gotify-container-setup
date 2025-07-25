@@ -1,0 +1,49 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for gotify_container_setup
+
+- name: Ensure gotify container volume directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0744'
+    owner: "{{ ansible_user | default(root) }}"
+    group: "{{ ansible_user | default(root) }}"
+  loop:
+    - "{{ gotify_container_setup_dir }}"
+    - "{{ gotify_container_setup_dir }}/data"
+  become: true
+
+- name: Create networks
+  community.docker.docker_network:
+    name: "{{ item.name }}"
+  loop: "{{ gotify_container_setup_networks }}"
+  become: true
+
+- name: Create gotify container
+  community.docker.docker_container:
+    name: "{{ gotify_container_setup_name }}"
+    image: "{{ gotify_container_setup_image }}"
+    state: "{{ gotify_container_setup_state | default('started') }}"
+    network_mode: "{{ gotify_container_setup_network_mode }}"
+    networks: "{{ gotify_container_setup_networks }}"
+    healthcheck: "{{ gotify_container_setup_healthcheck | default(omit) }}"
+    recreate: "{{ gotify_container_setup_recreate }}"
+    privileged: "{{ gotify_container_setup_privileged }}"
+    ports: "{{ gotify_container_setup_ports }}"
+    volumes:
+      - "{{ gotify_container_setup_dir }}/data:/app/data:rw,Z"
+    env: "{{ gotify_container_setup_env }}"
+    labels: "{{ gotify_container_setup_labels }}"
+    restart_policy: "{{ gotify_container_setup_restart_policy }}"
+
+- name: Enable linger for user {{ ansible_user | default('root') }}
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/loginctl
+      - enable-linger
+      - "{{ ansible_user | default('root') }}"
+    creates: "/var/lib/systemd/linger/{{ ansible_user | default('root') }}"
+  become: true
+  when: ansible_virtualization_type != "container"
+...
