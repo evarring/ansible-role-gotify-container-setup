@@ -51,6 +51,8 @@
     state: "{{ gotify_container_setup_state | default('started') }}"
     network_mode: "{{ gotify_container_setup_network_mode }}"
     networks: "{{ gotify_container_setup_networks }}"
+    cpus: "{{ gotify_container_setup_cpus }}"
+    memory: "{{ gotify_container_setup_memory }}"
     healthcheck: "{{ gotify_container_setup_healthcheck | default(omit) }}"
     recreate: "{{ gotify_container_setup_recreate }}"
     privileged: "{{ gotify_container_setup_privileged }}"

@@ -16,6 +16,9 @@ gotify_container_setup_privileged: false
 gotify_container_setup_ports:
   - "6969:80"
 
+gotify_container_setup_cpus: 0.5
+gotify_container_setup_memory: 128M
+
 gotify_container_setup_restart_policy: unless-stopped
 
 gotify_container_setup_labels:
