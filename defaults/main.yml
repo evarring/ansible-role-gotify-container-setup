@@ -11,7 +11,7 @@ gotify_container_setup_networks:
 gotify_container_setup_image: gotify/server:latest
 gotify_container_setup_dir: /srv/gotify
 
-gotify_container_setup_recreate: true
+gotify_container_setup_recreate: false
 gotify_container_setup_privileged: false
 gotify_container_setup_ports:
   - "6969:80"
