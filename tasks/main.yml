@@ -10,7 +10,7 @@
         name: "{{ gotifyimage_item }}"
         source: pull
       loop:
-        - "{{ gotify_container_setup_server_image }}"
+        - "{{ gotify_container_setup_image }}"
       loop_control:
         loop_var: gotifyimage_item
 
